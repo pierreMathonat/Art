@@ -9,46 +9,6 @@ import nme.Vector;
  * ...
  * @author pierre
  */
-class VFormat
-{
-	public static var XYZ_UV_COLOR:VFormat = new VFormat([V.XYZ, V.UV, V.COLOR]);
-	
-	public var formats:Array<V>;
-	public var data32PerVertex:Int;
-	
-	public function new(inFormats:Array<V>)
-	{
-		formats = new Array<V>();
-		
-		for (f in inFormats)
-		{
-			formats.push(f);
-			data32PerVertex += f.numProperties;
-		}
-	}
-}
-
- class V
-{
-	public static var XYZ		:V = new V(3);
-	public static var UV		:V = new V(2);
-	public static var COLOR		:V = new V(4);
-	
-	public var numProperties:Int;
-	public var nativeformat:Context3DVertexBufferFormat;
-	public function new(format:Int)
-	{
-		numProperties = format;
-		
-		nativeformat = switch(format)
-		{
-			case 1:FLOAT_1;
-			case 2:FLOAT_2;
-			case 3:FLOAT_3;
-			case 4:FLOAT_4;
-		}
-	}
-}
 
 class VertexStream 
 {
@@ -70,6 +30,7 @@ class VertexStream
 	
 	public var buffer(get_buffer, null):VertexBuffer3D;
 	
+	public var sizeAtLock:Int;
 	public var locked:Bool = false;
 	public var datachanged:Bool = false;
 	public var sizechanged:Bool = false;

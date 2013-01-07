@@ -8,22 +8,7 @@ import nme.display3D.Program3D;
  */
 
 class DefaultShader extends Shader
-{
-	
-	
-	
-	//public var program(get_program,null):Program3D;
-	//inline function get_program():Program3D { return p; }
-	
-	/*	init
-	 * 	-ctx.setProgram
-	 * 	-ctx.setConstantsFromVector
-	 *  -ctx.setTextureAt
-	 * 
-	 *  -ctx.setVertexBufferAt
-	 */
-	
-	 
+{	 
 	static var SRC =
 	{
 		var input:

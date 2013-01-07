@@ -31,14 +31,15 @@ class Main extends View
 
 	private function init(e) 
 	{		
-		var t2D:Tex2D = new Tex2D(new BitmapData(512, 512, true, 0xFFFFCCCC));
+		var t2D:Tex2D = new Tex2D(nme.Assets.getBitmapData("img/crate.png"));
+		var t2D2:Tex2D = new Tex2D(nme.Assets.getBitmapData("img/wall.png"));
 		var m:Material = new Material();
 				
 		var vs = new VertexStream(9);
-		vs.fromArray([	0, 0, 0, 0, 0,			2,0,0,1,
-						0, 256, 0, 0, 1,		1,0,0,1,
-						256, 256, 0, 1, 1,		1, 1, 1, 0,
-						256, 0, 0, 1, 0,		1,1,1,0,
+		vs.fromArray([	0, 0, 0, 0, 0,			1,1,1,1,
+						0, 256, 0, 0, 1,		1,1,1,1,
+						256, 256, 0, 1, 1,		1, 1, 1, 1,
+						256, 0, 0, 1, 0,		1,1,1,1,
 					]);
 		
 		var is = new IndexStream();
@@ -48,9 +49,12 @@ class Main extends View
 		m3d.appendTranslation(-s.stageWidth/2.0, -s.stageHeight/2.0, 0);
 		m3d.appendScale(2.0 / s.stageWidth, -2.0 / s.stageHeight, 1);
 
-		m.bind(vs, { mview:m3d }, { tex:t2D.native } );
+		
 				
 		ctx.clear(.5, .5, .5);
+		m.bind(vs, { mview:m3d }, { tex:t2D.native } );
+		ctx.drawTriangles(is.buffer);
+		m.bind(vs, { mview:m3d }, { tex:t2D2.native } );
 		ctx.drawTriangles(is.buffer);
 		ctx.present();
 	}

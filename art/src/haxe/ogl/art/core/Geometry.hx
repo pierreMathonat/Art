@@ -7,20 +7,8 @@ package haxe.ogl.art.core;
 
 class Geometry 
 {
-
-	public var mat:Material;
 	
-	public var usePosition:Bool;
-	public var useUv:Bool;
-	public var useNormal:Bool;
-	
-	public var vstream:VertexStream;
-	public var istream:IndexStream;
-	public var voff:Int;
-	public var ioff:Int;
-	
-	public var numv:Int;
-	public var numt:Int;
+	public var vstreams:Array<VertexStream>;
 	
 	public function new() 
 	{

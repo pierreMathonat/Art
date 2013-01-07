@@ -13,7 +13,6 @@ import nme.Lib;
 
 class View extends Sprite
 {
-
 	public static var _I:View;
 	
 	public var s:Stage;
