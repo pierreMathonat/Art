@@ -1,5 +1,5 @@
 package haxe.ogl.art.core;
-import format.hxsl.Shader;
+import hxsl.Shader;
 import nme.display3D.Program3D;
 
 /**
@@ -9,6 +9,12 @@ import nme.display3D.Program3D;
 
 class DefaultShader extends Shader
 {	 
+	
+	public function new()
+	{
+		super();
+	}
+	
 	static var SRC =
 	{
 		var input:
@@ -24,7 +30,8 @@ class DefaultShader extends Shader
 		
 		function vertex(mview:M44)
 		{
-			out = pos.xyzw * mview;
+			var tpos = pos.xyzw;
+			out = tpos * mview;
 			uvt = uv;
 			colort = color.xyz;
 			alphat = color.w;

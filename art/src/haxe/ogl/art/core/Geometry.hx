@@ -6,12 +6,14 @@ package haxe.ogl.art.core;
  */
 
 class Geometry 
-{
+{	
 	
-	public var vstreams:Array<VertexStream>;
+	public var vstream:VertexStream;
+	public var istream:IndexStream;
 	
 	public function new() 
 	{
-		
+		vstream = new VertexStream();
+		istream = new IndexStream();
 	}
 }

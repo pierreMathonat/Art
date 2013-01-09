@@ -1,0 +1,9 @@
+-cp ../..
+-swf fbxViewer.swf
+-swf-header 800:600:30:000000
+--flash-strict
+-swf-version 11.3
+-main Viewer
+-lib hxsl
+-D h3d
+--dce full

@@ -5,6 +5,7 @@ import nme.display.Stage3D;
 import nme.display3D.Context3D;
 import nme.events.Event;
 import nme.Lib;
+import src.haxe.ogl.art.core.Renderer;
 
 /**
  * ...
@@ -19,9 +20,21 @@ class View extends Sprite
 	public var s3d:Stage3D;
 	public var ctx:Context3D;
 	
+	public var cam2D:Camera2D;
+	
+	var enterFrameEvent:Event;
+	
+	public var time:Int;
+	public var fps:Int;
+	
+	public var renderer:Renderer;
+	
 	public function new() 
 	{
+		enterFrameEvent = new Event(Event.ENTER_FRAME);
+		
 		super();
+		cam2D = new Camera2D();
 		addEventListener(Event.ADDED_TO_STAGE, _init);
 	}
 	
@@ -47,36 +60,31 @@ class View extends Sprite
 		resize(e);
 		
 		if (_I == null)_I = this;
+		renderer = new Renderer(ctx);
 		
 		dispatchEvent(new Event(Event.ADDED_TO_STAGE));
 	}
 	
 	function resize(e):Void
 	{
-		ctx.configureBackBuffer(s.stageWidth, s.stageHeight, 2);
+		ctx.configureBackBuffer(s.stageWidth, s.stageHeight, 0);
+		cam2D.resize(s.stageWidth, s.stageHeight);
 	}
 	
+	var fpstime:Int;
+	var frames:Int;
 	function enterFrame(e):Void
 	{
-		//compute Visible Geometries
-		//compute Active Materials
-		//prepare Materials batches
+		time = Lib.getTimer();
+		dispatchEvent(enterFrameEvent);
+		frames++;
 		
-		ctx.clear();
-		/*
-		for(m in Material.ACTIVE)
+		if (fpstime == 0) fpstime = time;
+		if (time-fpstime > 1000)
 		{
-			m.bindProgram();
-			for(batch in m.BATCHES)
-			{
-				batch.bindConstants();
-				batch.bindBuffers();
-				batch.draw();
-			}
+			fps = frames;
+			frames = fpstime = 0;
 		}
-		
-		ctx.present();
-		 */
 	}
 	
 	function drawTriangles(istream:IndexStream, first:Int=0, numTris:Int=-1):Void

@@ -1,0 +1,69 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (0xc0020001), pid=8156, tid=3944
+#
+# JRE version: 6.0_35-b10
+# Java VM: Java HotSpot(TM) Client VM (20.10-b01 mixed mode, sharing windows-x86 )
+# Problematic frame:
+# C  [KERNELBASE.dll+0xc41f]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0c058c00):  JavaThread "Thread-1" daemon [_thread_in_native, id=3944, stack(0x09130000,0x09230000)]
+
+siginfo: ExceptionCode=0xc0020001, ExceptionInformation=0x8007042b 
+
+Registers:
+EAX=0x0922eb5c, EBX=0x345f6880, ECX=0x00000001, EDX=0x00000000
+ESP=0x0922eb5c, EBP=0x0922ebac, ESI=0x0660c3f0, EDI=0x0c058c00
+EIP=0x763ec41f, EFLAGS=0x00000206
+
+Top of Stack: (sp=0x0922eb5c)
+0x0922eb5c:   c0020001 00000001 00000000 763ec41f
+0x0922eb6c:   00000001 8007042b 0c058c00 392b45b0
+0x0922eb7c:   04de6db0 0c058c00 393be3a0 3875f348
+0x0922eb8c:   0922ebc8 0a05878e 0922eba8 392b5248
+0x0922eb9c:   0922ebf4 0a05878e 0922ebb8 6d826e96
+0x0922ebac:   0922ebc8 552bdd6b c0020001 00000001
+0x0922ebbc:   00000001 0922ebc4 8007042b 0922ebd8
+0x0922ebcc:   5524ce7e 8007042b 345f6880 0922ebf8 
+
+Instructions: (pc=0x763ec41f)
+0x763ec3ff:   02 50 ff 75 14 8d 45 c4 50 e8 35 ad 02 00 83 c4
+0x763ec40f:   0c eb 03 89 45 c0 8d 45 b0 50 ff 15 5c 11 3e 76
+0x763ec41f:   c9 c2 10 00 cc cc cc cc cc 8b ff 55 8b ec 56 8b
+0x763ec42f:   75 08 83 fe f4 72 18 83 fe f6 77 13 8d 45 08 50 
+
+
+Register to memory mapping:
+
+EAX=0x0922eb5c is pointing into the stack for thread: 0x0c058c00
+EBX=0x345f6880 is an oop
+{method} 
+ - klass: {other class}
+ECX=0x00000001 is an unknown value
+EDX=0x00000000 is an unknown value
+ESP=0x0922eb5c is pointing into the stack for thread: 0x0c058c00
+EBP=0x0922ebac is pointing into the stack for thread: 0x0c058c00
+ESI=0x0660c3f0 is an unknown value
+EDI=0x0c058c00 is a thread
+
+
+Stack: [0x09130000,0x09230000],  sp=0x0922eb5c,  free space=1018k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [KERNELBASE.dll+0xc41f]  RaiseException+0x58
+C  [mscorwks.dll+0x24dd6b]  GetAddrOfContractShutoffFlag+0x95a9
+C  [mscorwks.dll+0x1dce7e]  Ordinal24+0x1e5bd
+C  [mscorwks.dll+0x1e6d]
+j  flash.tools.debugger.__IProgress.setProgress(II)V+0
+j  flash.tools.debugger.concrete.PlayerSessionManager.accept(Lflash/tools/debugger/concrete/ProcessListener;Lflash/tools/debugger/IProgress;)Lflash/tools/debugger/Session;+96
+j  flash.tools.debugger.concrete.PlayerSessionManager.accept(Lflash/tools/debugger/IProgress;)Lflash/tools/debugger/Session;+3
+v  ~StubRoutines::call_stub
+V

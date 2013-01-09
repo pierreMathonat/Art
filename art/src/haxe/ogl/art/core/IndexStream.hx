@@ -98,4 +98,9 @@ class IndexStream
 		return buffer;
 	}
 	
+	public function toString():String
+	{
+		return "ISTREAM"+raw;
+	}
+	
 }
