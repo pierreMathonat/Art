@@ -6,6 +6,8 @@ import haxe.ogl.art.core.VertexStream;
 import haxe.ogl.art.core.View;
 import haxe.ogl.art.m2d.geom.M44;
 import hxsl.Shader;
+import nme.display3D.Context3DCompareMode;
+import nme.geom.Vector3D;
 
 /**
  * ...
@@ -24,23 +26,22 @@ class BitmapShader extends Shader
 		var useTex:Bool;
 		
 		var _uv:Float2;
-		var _alpha:Float;
 		var _color:Float3;
 		
-		function vertex(cam:M44,mpos:M44)
+		function vertex(cam:M44,mpos:M44,size:Float3)
 		{
-			var _pos:Float4 = (mpos != null)?pos.xyzw * mpos:pos.xyzw;
-			out = _pos * cam;
+			var p:Float4;
+			p.xyz = pos * size;
+			p.w = color.z;
+			out = ((mpos != null)?p.xyzw * mpos:p.xyzw) * cam;
 			
 			_uv = uv;
-			_color = color.xyz;
-			_alpha = color.w;
+			_color = color.xyz*color.w;
 		}
 		
 		function fragment(tex:Texture)
 		{
-			var f:Float4 = _color.xyzw * _alpha;
-			out = (useTex)?tex.get(_uv) * f:f;
+		out = (useTex)?tex.get(_uv) * _color.xyzw:_color.xyzw;
 		}
 	}
 }
@@ -58,6 +59,7 @@ class BitmapMaterial extends Material
 		{
 			mshader.useTex = true;
 			mshader.tex = t.native;
+			mshader.size = new Vector3D(t.width, t.height);
 		}else {
 			mshader.useTex = false;
 		}

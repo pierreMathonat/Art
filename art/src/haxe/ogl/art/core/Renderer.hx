@@ -37,58 +37,35 @@ class Renderer
 	inline public static var MAX_QUAD:Int = Std.int(MAX_VERT / 4);
 	inline public static var MAX_VERT:Int = 65535;
 	
-	public var TRIS_STRIP:IndexStream;
-	public var QUAD_STRIP:IndexStream;
-	
 	public function new(c:Context3D) 
 	{
 		ctx = c;
 		curAttributes = 0;
 		curTextures = new Array<TextureBase>();
-		
-		
-		
-		
-		var QUAD:Array<Int> = [];
-		var p = 0;
-		for (i in 0...2)
-		{
-			var k = i * 4;
-			
-			QUAD[p++] = k + 1;
-			QUAD[p++] = k + 2;
-			QUAD[p++] = k + 3;
-			QUAD[p++] = k + 3;
-			QUAD[p++] = k	 ;
-			QUAD[p++] = k + 1;
-		}
-		
-		trace(QUAD);
-		
-		QUAD_STRIP = new IndexStream();
-		QUAD_STRIP.fromArray(QUAD);
 	}
 	
 	// material	
-	public inline function setMaterial(m:Material):Material
+	public inline function setMaterial(m:Material):Void
 	{
-		if (m == currentMaterial) 
+		if (m.blend != curBlend) 
 		{
-			return m;
+			ctx.setBlendFactors(m.blend.src, m.blend.dst);
+			curBlend = m.blend;
 		}
-		else
+		if (m.depth != curDepthTest || m.useDepth != curDepthWrite ) 
 		{
-			if (m.blend != curBlend) 
-				ctx.setBlendFactors(m.blend.src, m.blend.dst);
-			if (m.depth != curDepthTest || m.useDepth != curDepthWrite )
-				ctx.setDepthTest(m.useDepth, m.depth);
-			if (m.culling != curCulling)
-				ctx.setCulling(m.culling);
-			
-			selectShader(m.shader);
-			
-			return currentMaterial = m;
+			ctx.setDepthTest(m.useDepth, m.depth);
+			curDepthTest = m.depth;
+			curDepthWrite = m.useDepth;
 		}
+		if (m.culling != curCulling) 
+		{
+			ctx.setCulling(m.culling);
+			curCulling = m.culling;
+		}
+		
+		selectShader(m.shader);
+		currentMaterial = m;
 	}
 	
 	inline function selectShader(shader:Shader):Void
@@ -128,7 +105,6 @@ class Renderer
 				}
 				if (t != curTextures[i])
 				{
-					//trace("bindTexture");
 					ctx.setTextureAt(i, t);
 					curTextures[i] = t;
 				}
@@ -137,11 +113,11 @@ class Renderer
 	}
 	
 	//buffer	
-	public inline function setBuffer(v:VertexStream)
+	public inline function setBuffer(v:VertexStream):Void
 	{
 		if (v == currentBuffer)
 		{
-			return v;
+			return;
 		}
 		else
 		{			
@@ -166,18 +142,12 @@ class Renderer
 			}
 			curAttributes = pos;
 
-			return currentBuffer = v;
+			currentBuffer = v;
 		}
 	}
 	
 	public inline function draw(triangles:IndexStream,start:Int=0,numTris:Int=-1):Void
 	{
 		ctx.drawTriangles(triangles.buffer, start, numTris);
-	}
-	
-	public inline function drawQuads(v:VertexStream, numTris:Int):Void
-	{
-		setBuffer(v);
-		ctx.drawTriangles(QUAD_STRIP.buffer,0,numTris);
 	}
 }

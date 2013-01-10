@@ -42,15 +42,17 @@ class VertexStream
 		raw 				= new Vector<Float>();
 	}
 	
+	var oldSize:Int = 0;
 	public inline function lock():Void
 	{
+		oldSize = numFloats;
 		locked = true;
 	}
 	
 	public inline function unlock():Void
 	{
 		locked = false;
-		datachanged = true;
+		if(oldSize!=numFloats)datachanged = true;
 	}
 	
 	inline function set_data32(v:Int):Int

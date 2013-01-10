@@ -48,15 +48,18 @@ class IndexStream
 		unlock();
 	}
 	
+	var oldSize:Int = 0;
 	public inline function lock():Void
 	{
+		oldSize = numInt;
 		locked = true;
 	}
 	
 	public inline function unlock():Void
 	{
-		locked = false;
-		sizechanged = datachanged = true;
+		locked = false; 
+		datachanged = true;
+		if (numInt != oldSize) sizechanged = true;
 	}
 	
 	inline function set_numInt(v:Int):Int

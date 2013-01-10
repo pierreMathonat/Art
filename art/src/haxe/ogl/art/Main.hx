@@ -1,5 +1,6 @@
 package haxe.ogl.art;
 
+import com.eclecticdesignstudio.motion.Actuate;
 import haxe.ogl.art.core.Blend;
 import haxe.ogl.art.core.IndexStream;
 import haxe.ogl.art.core.Material;
@@ -9,6 +10,7 @@ import nme.Assets;
 import nme.display.BitmapData;
 import haxe.ogl.art.core.Tex2D;
 import haxe.ogl.art.core.View;
+import nme.display.StageQuality;
 import nme.events.Event;
 import nme.geom.Matrix3D;
 import nme.Lib;
@@ -42,48 +44,27 @@ class Main extends View
 		scene = new Stage();
 		var group = new Sprite();
 		
-		for (i in 0...400)
+		var bmd = new Tex2D(Assets.getBitmapData("img/crate.png", false));
+		
+		for (x in 0...20)
 		{
-			var ds = new Bitmap(Assets.getBitmapData("img/crate.png"));
-			ds.x = ds.y = i*32;
-			ds.rotationZ = 90;
-			group.addChild(ds);			
-		}
+			for (y in 0...20)
+			{
+				var ds = new Bitmap(bmd);
+				ds.x = x * 64;
+				ds.y = y * 64;
+				ds.rotationZ = 90;
+				ds.scaleX = ds.scaleY = Math.random();
+				Actuate.tween(ds, 20, { rotationZ:360 } ).repeat().reflect();
+				group.addChild(ds);				
+			}
 
+		}
 		
 		scene.addChild(group);
-		
-		//group.x = group.y = 128;
-		//group.rotationZ = 45;
-		
-		
-		
-/*		var t2D:Tex2D = new Tex2D(nme.Assets.getBitmapData("img/crate.png"));
-		var t2D2:Tex2D = new Tex2D(nme.Assets.getBitmapData("img/wall.png"));
-		var m:Material = new Material();
-		m.blend = Blend.NORMAL;
-				
-		var vs = new VertexStream(9);
-		vs.fromArray([	0, 0, 0, 0, 0,			1,1,1,1,
-						0, 256, 0, 0, 1,		1,1,1,1,
-						256, 256, 0, 1, 1,		1, 1, 1, 1,
-						256, 0, 0, 1, 0,		1,1,1,1,
-					]);
-		
-		var is = new IndexStream();
-		is.fromArray([1, 2, 3, 0, 1, 3]);
-
-		
-		
-		m.bind(vs, { mview:cam2D, transform:new Matrix3D() }, { tex:t2D.native } );
-		ctx.drawTriangles(is.buffer);
-		m.bind(vs, { mview:cam2D, transform:new Matrix3D() }, { tex:t2D2.native } );
-		ctx.drawTriangles(is.buffer);*/
-		
 		addEventListener(Event.ENTER_FRAME, update);
-		
-
 	}
+	
 	var scene:Stage;
 	inline function update(e):Void
 	{
@@ -98,6 +79,7 @@ class Main extends View
 		var stage = Lib.current.stage;
 		stage.scaleMode = nme.display.StageScaleMode.NO_SCALE;
 		stage.align = nme.display.StageAlign.TOP_LEFT;
+		stage.quality = StageQuality.LOW;
 		
 		Lib.current.addChild(new Main());
 	}

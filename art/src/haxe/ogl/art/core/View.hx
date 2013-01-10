@@ -16,6 +16,8 @@ class View extends Sprite
 {
 	public static var _I:View;
 	
+	public var antialiasing:Int = 2;
+	
 	public var s:Stage;
 	public var s3d:Stage3D;
 	public var ctx:Context3D;
@@ -67,7 +69,7 @@ class View extends Sprite
 	
 	function resize(e):Void
 	{
-		ctx.configureBackBuffer(s.stageWidth, s.stageHeight, 0);
+		ctx.configureBackBuffer(s.stageWidth, s.stageHeight, antialiasing);
 		cam2D.resize(s.stageWidth, s.stageHeight);
 	}
 	
