@@ -28,20 +28,26 @@ class BitmapShader extends Shader
 		var _uv:Float2;
 		var _color:Float3;
 		
-		function vertex(cam:M44,mpos:M44,size:Float3)
+		function vertex(cam:M44,mpos:M44,size:Float4)
 		{
 			var p:Float4;
-			p.xyz = pos * size;
-			p.w = color.z;
-			out = ((mpos != null)?p.xyzw * mpos:p.xyzw) * cam;
+			
+			p = pos.xyzw;// * size;
+			
+			if (mpos != null) {
+				p *= mpos;
+			}
+			
+			out = p*cam;
 			
 			_uv = uv;
 			_color = color.xyz*color.w;
 		}
 		
+		
 		function fragment(tex:Texture)
 		{
-		out = (useTex)?tex.get(_uv) * _color.xyzw:_color.xyzw;
+			out = (useTex)?tex.get(_uv) * _color.xyzw:_color.xyzw;
 		}
 	}
 }
@@ -59,7 +65,7 @@ class BitmapMaterial extends Material
 		{
 			mshader.useTex = true;
 			mshader.tex = t.native;
-			mshader.size = new Vector3D(t.width, t.height);
+			mshader.size = new Vector3D(t.width, t.height,1,1);
 		}else {
 			mshader.useTex = false;
 		}

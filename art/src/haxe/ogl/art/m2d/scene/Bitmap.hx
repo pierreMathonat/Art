@@ -19,7 +19,7 @@ import nme.Lib;
 
 class Bitmap extends DisplayObject
 {
-	public static var vstream:VertexStream;
+	public var vstream:VertexStream;
 	public static var istream:IndexStream;
 	
 	public static var batch:QuadBatch;
@@ -61,6 +61,16 @@ class Bitmap extends DisplayObject
 	override inline public function render():Void
 	{
 		//QuadBatch.add(localToWorld,blendMode,tex);
+		vstream.fromArray([
+				-50, -50, 0, 0, 0, 1, 1, 1, 1,
+				-50, 050, 0, 0, 1, 1, 1, 1, 1,
+				050, 050, 0, 1, 1, 1, 1, 1, 1,
+				050, -50, 0, 1, 0, 1, 1, 1, 1,
+			]);
+			
+		vstream.transform(localToWorld , 0);
+		//trace(localToWorld);
+		//trace(vstream);
 		
 		mat.mpos = localToWorld;
 		mat.blend = blendMode.blend;

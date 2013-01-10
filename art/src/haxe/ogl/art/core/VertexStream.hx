@@ -212,10 +212,7 @@ class VertexStream
 		start = startid;
 		for (i in 0...num)
 		{
-			var o = start++ * data32PerVertex + offset;
-			raw[o	 ]=TMP_NUMBERS[tmp++];
-			raw[o + 1]=TMP_NUMBERS[tmp++];
-			raw[o + 2]=TMP_NUMBERS[tmp++];
+			set3(start++,offset, TMP_NUMBERS[tmp++], TMP_NUMBERS[tmp++], TMP_NUMBERS[tmp++]);
 		}
 	}
 	
@@ -239,6 +236,10 @@ class VertexStream
 	public function iterator():VertexIterator
 	{
 		return new VertexIterator(this);
+	}
+	public inline function toString():String
+	{
+		return "VSTREAM::"+raw;
 	}
 }
 
