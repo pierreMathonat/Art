@@ -371,7 +371,6 @@ class Shader {
 
 	inline function saveMatrix( params : flash.Vector<Float>, index : Int, m : ShaderTypes.Matrix, r : Int, c : Int ) {
 		if( index >= 0 ) {
-			#if h3d
 			params[index++] = m._11;
 			if( c > 1 ) params[index++] = m._12;
 			if( c > 2 ) params[index++] = m._13;
@@ -397,40 +396,11 @@ class Shader {
 					}
 				}
 			}
-			#else
-			var m = m.rawData;
-			params[index++] = m[0];
-			if( c > 1 ) params[index++] = m[1];
-			if( c > 2 ) params[index++] = m[2];
-			if( c > 3 ) params[index++] = m[3];
-			
-			if( r > 1 ) {
-				params[index++] = m[4];
-				if( c > 1 ) params[index++] = m[5];
-				if( c > 2 ) params[index++] = m[6];
-				if( c > 3 ) params[index++] = m[7];
-
-				if( r > 2 ) {
-					params[index++] = m[8];
-					if( c > 1 ) params[index++] = m[9];
-					if( c > 2 ) params[index++] = m[10];
-					if( c > 3 ) params[index++] = m[11];
-
-					if( r > 3 ) {
-						params[index++] = m[12];
-						if( c > 1 ) params[index++] = m[13];
-						if( c > 2 ) params[index++] = m[14];
-						if( c > 3 ) params[index++] = m[15];
-					}
-				}
-			}
-			#end
 		}
 	}
 
 	inline function saveMatrixT( params : flash.Vector<Float>, index : Int, m : ShaderTypes.Matrix, r : Int, c : Int ) {
 		if( index >= 0 ) {
-			#if h3d
 			params[index++] = m._11;
 			if( c > 1 ) params[index++] = m._21;
 			if( c > 2 ) params[index++] = m._31;
@@ -456,34 +426,6 @@ class Shader {
 					}
 				}
 			}
-			#else
-			var m = m.rawData;
-			params[index++] = m[0];
-			if( c > 1 ) params[index++] = m[4];
-			if( c > 2 ) params[index++] = m[8];
-			if( c > 3 ) params[index++] = m[12];
-			
-			if( r > 1 ) {
-				params[index++] = m[1];
-				if( c > 1 ) params[index++] = m[5];
-				if( c > 2 ) params[index++] = m[9];
-				if( c > 3 ) params[index++] = m[13];
-
-				if( r > 2 ) {
-					params[index++] = m[2];
-					if( c > 1 ) params[index++] = m[6];
-					if( c > 2 ) params[index++] = m[10];
-					if( c > 3 ) params[index++] = m[14];
-
-					if( r > 3 ) {
-						params[index++] = m[3];
-						if( c > 1 ) params[index++] = m[7];
-						if( c > 2 ) params[index++] = m[11];
-						if( c > 3 ) params[index++] = m[15];
-					}
-				}
-			}
-			#end
 		}
 	}
 

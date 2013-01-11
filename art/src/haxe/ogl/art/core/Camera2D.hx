@@ -1,12 +1,11 @@
 package haxe.ogl.art.core;
-import nme.geom.Matrix3D;
 
 /**
  * ...
  * @author pierre
  */
 
-class Camera2D extends Matrix3D
+class Camera2D extends M44
 {
 
 	public var width:Float;
@@ -24,8 +23,8 @@ class Camera2D extends Matrix3D
 		height = h;
 		
 		identity();
-		appendTranslation(-w/2,-h/2,0);
-		appendScale(2/w,-2/h,1);
+		translate(-w*.5,-h*.5);
+		scale(2/w,-2/h);
 	}
 	
 }

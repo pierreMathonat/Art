@@ -37,15 +37,30 @@ class IndexStream
 		var l = inArray.length;
 		
 		if (l != numInt) numInt = l; 
-		
-		lock();
-		
+			
 		for (i in 0...numInt)
 		{
 			raw[i] = inArray[i];
 		}
+	}
+	
+	public inline function pushArray(inArray:Array<Int>):Void
+	{
+		var l = inArray.length;
 		
-		unlock();
+		var p = numInt;
+		numInt += l;
+				
+		for (i in 0...l)
+		{
+			raw[p++] = inArray[i];
+		}
+		
+	}
+	
+	public inline function clear():Void
+	{
+		numInt = 0;
 	}
 	
 	var oldSize:Int = 0;
@@ -68,7 +83,7 @@ class IndexStream
 		{
 			numInt = v;
 			numTriangles = Std.int(numInt / 3);
-			sizechanged = true;
+			if(!locked)sizechanged = true;
 		}
 		
 		return numInt;
@@ -89,13 +104,16 @@ class IndexStream
 		
 		if (sizechanged)
 		{
+			trace("index buffer created");
 			if (buffer != null) buffer.dispose();
 			buffer = ctx.createIndexBuffer(numInt);
 			datachanged = true;
+			sizechanged = false;
 		}
 		if (datachanged)
 		{
 			buffer.uploadFromVector(raw, 0, numInt);
+			datachanged = false;
 		}
 		
 		return buffer;
@@ -103,7 +121,7 @@ class IndexStream
 	
 	public function toString():String
 	{
-		return "ISTREAM"+raw;
+		return "ISTREAM::"+raw;
 	}
 	
 }

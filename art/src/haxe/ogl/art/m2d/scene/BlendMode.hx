@@ -14,7 +14,7 @@ class BlendMode
 	public static var ADD		:BlendMode = new BlendMode(Blend.ADD		);
 	public static var MULTIPLY	:BlendMode = new BlendMode(Blend.MULTIPLY	);
 	public static var ERASE		:BlendMode = new BlendMode(Blend.ERASE		);
-	public static var HIDE		:BlendMode = new BlendMode(Blend.HIDE		);
+	public static var SCREEN	:BlendMode = new BlendMode(Blend.SCREEN		);
 	
 	public var blend:Blend;
 	

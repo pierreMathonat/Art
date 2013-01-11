@@ -21,7 +21,7 @@ class Tex2D
 	public function new(?bmd:BitmapData)
 	{
 		ctx = View._I.ctx;
-		if (bmd != null) bitmapData(bmd);
+		if (bmd != null) bitmapData(bmd,true);
 	}
 	
 	inline public function bitmapData(bmd:BitmapData, createMip:Bool=false):Void

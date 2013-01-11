@@ -22,6 +22,8 @@
  * IN THE SOFTWARE.
  */
 package hxsl;
+import haxe.ogl.art.core.M44;
+import haxe.ogl.art.core.Vec3;
 
 #if h3d
 typedef Texture = h3d.mat.Texture;
@@ -29,8 +31,8 @@ typedef Vector = h3d.Vector;
 typedef Matrix = h3d.Matrix;
 #else
 typedef Texture = flash.display3D.textures.TextureBase;
-typedef Vector = flash.geom.Vector3D;
-typedef Matrix = flash.geom.Matrix3D;
+typedef Vector = Vec3;
+typedef Matrix = M44;
 #end
 
 typedef FixedArray<T,Const> = Array<T>;

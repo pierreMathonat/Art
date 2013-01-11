@@ -12,6 +12,7 @@ import nme.display3D.Context3DTriangleFace;
 import nme.display3D.Context3D;
 import nme.display3D.Context3DProgramType;
 import nme.display3D.textures.TextureBase;
+import nme.display3D.VertexBuffer3D;
 import nme.utils.Endian;
 
 /**
@@ -25,7 +26,7 @@ class Renderer
 
 	var currentMaterial:Material;
 	var currentShader:ShaderInstance;
-	var currentBuffer:VertexStream;
+	var currentBuffer:VertexBuffer3D;
 	var curTextures:Array<TextureBase>;
 	var curAttributes:Int;
 	var curBlend:Blend;
@@ -115,12 +116,12 @@ class Renderer
 	//buffer	
 	public inline function setBuffer(v:VertexStream):Void
 	{
-		if (v == currentBuffer)
+		if (v.buffer == currentBuffer)
 		{
 			return;
 		}
 		else
-		{			
+		{
 			if (v.data32PerVertex < currentShader.stride)
 			{
 				throw ("Buffer Stride (" + v.data32PerVertex +") and shader stride (" + currentShader.stride +") do not match");
@@ -142,7 +143,7 @@ class Renderer
 			}
 			curAttributes = pos;
 
-			currentBuffer = v;
+			currentBuffer = v.buffer;
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package haxe.ogl.art.m2d.geom;
+package haxe.ogl.art.core;
 import nme.geom.Matrix3D;
 import nme.geom.Vector3D;
 import nme.Vector;
@@ -28,7 +28,6 @@ class M44 {
 
 	public function new() {
 		identity();
-		m3d = new Matrix3D();
 	}
 
 	public function zero() {
@@ -113,29 +112,14 @@ class M44 {
 	
 	public inline function recompose(p:Vector3D, s:Vector3D, r:Vector3D)
 	{	
-		identity();
-		
-		rotate(r.x, r.y, r.z);
+		initRotate(r.x, r.y, r.z);
 		scale(s.x, s.y, s.z);
-		translate(p.x, p.y, p.z);
-		//_14 += p.x;
-		//_24 += p.y;
-		//_34 += p.z;
-		//translate(p.x, p.y, p.z);
-		
+		translate(p.x, p.y, p.z);		
 	}
 	
 	public inline function append(m:M44)
 	{
 		multiply(this,m);
-	}
-	
-	public var m3d(get_m3d, null):Matrix3D;
-	
-	inline function get_m3d():Matrix3D
-	{
-		m3d.rawData = Vector.ofArray(getFloats());
-		return m3d;
 	}
 	
 	public static var RADTODEG:Float = 180 / Math.PI;
@@ -531,15 +515,21 @@ class M44 {
 	
 	public inline function transformRawData(_in:Vector<Float>, _out:Vector<Float>):Void
 	{
-		m3d.transformVectors(_in, _out);
-		/*var i = 0;
-		while( i < _in.length)
+		var num:Int = _in.length;
+		var i:Int = 0;
+		while (i < num)
 		{
-			var x = _in[i++];
-			var y = _in[i++];
-			var z = _in[i++];
+			var x = _in[i	 ];
+			var y = _in[i + 1];
+			var z = _in[i + 2];
+			//var w = 1 / (x * _14 + y * _24 + z * _34 + _44);
 			
-		}*/
+			_out[i	  ] = (x * _11 + y * _21 + z * _31 + _41);// * w;
+			_out[i + 1] = (x * _12 + y * _22 + z * _32 + _42);// * w;
+			_out[i + 2] = (x * _13 + y * _23 + z * _33 + _43);// * w;
+			
+			i += 3;
+		}
 	}
 	
 	public static function f( v : Float ) {

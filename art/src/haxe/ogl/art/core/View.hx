@@ -16,7 +16,8 @@ class View extends Sprite
 {
 	public static var _I:View;
 	
-	public var antialiasing:Int = 2;
+	
+	public var antialiasing:Int = 1;
 	
 	public var s:Stage;
 	public var s3d:Stage3D;
@@ -25,6 +26,8 @@ class View extends Sprite
 	public var cam2D:Camera2D;
 	
 	var enterFrameEvent:Event;
+	var beginRenderEvent:Event;
+	var endRenderEvent:Event;
 	
 	public var time:Int;
 	public var fps:Int;
@@ -34,6 +37,8 @@ class View extends Sprite
 	public function new() 
 	{
 		enterFrameEvent = new Event(Event.ENTER_FRAME);
+		
+		visible = false;
 		
 		super();
 		cam2D = new Camera2D();
@@ -77,6 +82,7 @@ class View extends Sprite
 	var frames:Int;
 	function enterFrame(e):Void
 	{
+		//dispatchEvent(beginRenderEvent);
 		time = Lib.getTimer();
 		dispatchEvent(enterFrameEvent);
 		frames++;
@@ -87,6 +93,7 @@ class View extends Sprite
 			fps = frames;
 			frames = fpstime = 0;
 		}
+		//dispatchEvent(endRenderEvent);
 	}
 	
 	function drawTriangles(istream:IndexStream, first:Int=0, numTris:Int=-1):Void

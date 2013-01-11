@@ -1,7 +1,7 @@
 package haxe.ogl.art.core;
 import format.tools.BufferInput;
 import haxe.ogl.art.m2d.geom.ColorTransform;
-import haxe.ogl.art.m2d.geom.M44;
+import haxe.ogl.art.core.M44;
 import native.display3D.Context3DVertexBufferFormat;
 import nme.display3D.Context3D;
 import nme.display3D.VertexBuffer3D;
@@ -58,7 +58,7 @@ class VertexStream
 	inline function set_data32(v:Int):Int
 	{
 		if (v != data32PerVertex) {
-			sizechanged = true;
+			if(!locked)sizechanged = true;
 			data32PerVertex = v;
 			numVertices = Std.int(numFloats / data32PerVertex);			
 		}
@@ -69,7 +69,7 @@ class VertexStream
 	inline function set_numFloats(v:Int):Int
 	{
 		if (v != numFloats) {
-			sizechanged = true;
+			if(!locked)sizechanged = true;
 			numFloats = v;
 			numVertices = Std.int(numFloats / data32PerVertex);
 		}
@@ -91,14 +91,17 @@ class VertexStream
 		
 		if (sizechanged)
 		{
+			trace("new buffer created");
 			if (buffer != null) buffer.dispose();
 			buffer = ctx.createVertexBuffer(numVertices, data32PerVertex);
+			sizechanged = false;
 			datachanged = true;
 		}
 		
 		if (datachanged)
 		{
 			buffer.uploadFromVector(raw, 0, numVertices);
+			datachanged = false;
 		}
 		
 		return buffer;
@@ -107,6 +110,41 @@ class VertexStream
 	
 	//--------------------------------------------------------------------------
 	
+	public inline function clear():Void
+	{
+		numFloats = 0;
+	}
+	
+	public inline function fill(numVerts:Int):Void
+	{
+		numFloats = numVerts * data32PerVertex;
+		for (i in 0...numFloats)
+		{
+			raw[i] = 0;
+		}
+	}
+	
+	public inline function concat(vstream:VertexStream):Void
+	{		
+		var p = numFloats;
+		numFloats += vstream.numFloats;
+		
+		for (i in 0...vstream.numFloats)
+		{
+			raw[p++] = vstream.raw[i];
+		}
+	}
+	
+	public inline function setFloats(id:Int, inArray:Array<Float>):Void
+	{
+		id *= data32PerVertex;
+		
+		var j = 0;
+		for (i in id...id + inArray.length)
+		{
+			raw[i] = inArray[j++];
+		}
+	}
 	
 	public inline function fromArray(inArray:Array<Float>):Void
 	{
@@ -115,15 +153,11 @@ class VertexStream
 		if (l != numFloats) {
 			numFloats = l;
 		}
-		
-		lock();
-		
+				
 		for (i in 0...numFloats)
 		{
 			raw[i] = inArray[i];
 		}
-		
-		unlock();
 	}
 	
 	public inline function pushArray(inArray:Array<Float>):Void
@@ -132,15 +166,11 @@ class VertexStream
 		
 		var s = numFloats;
 		numFloats += inArray.length;
-		
-		lock();
-		
+				
 		for (i in 0...l)
 		{
 			raw[s++] = inArray[i];
 		}
-		
-		unlock();
 	}
 	
 	public inline function set(id:Int, off:Int, value:Float):Void
@@ -192,6 +222,7 @@ class VertexStream
 	
 	public inline function transform(m:M44, offset:Int=0, startid:Int=0, num:Int=-1):Void
 	{	
+		
 		if (num < 0) num = numVertices - startid;
 		TMP_NUMBERS.length = num * 3;
 		
@@ -214,21 +245,16 @@ class VertexStream
 		{
 			set3(start++,offset, TMP_NUMBERS[tmp++], TMP_NUMBERS[tmp++], TMP_NUMBERS[tmp++]);
 		}
+		
 	}
 	
-	//transform 4 floats starting from offset for each vert between startid and startid+num.
-	public inline function colorTransform(ct:ColorTransform, offset:Int=0, startid:Int = 0, num:Int = -1):Void
-	{
+	public inline function colorTransform(ct:Vec3, offset:Int=0, startid:Int = 0, num:Int = -1):Void
+	{		
 		if (num < 0) num = numVertices - startid;
-		
-		var r = ct.redMultiplier;
-		var g = ct.greenMultiplier;
-		var b = ct.blueMultiplier;
-		var a = ct.alphaMultiplier;
 		
 		for (i in 0...num)
 		{
-			set4(startid++, offset, r, g, b, a);
+			set4(startid++, offset, ct.x, ct.y, ct.z, ct.w);
 		}
 	}
 	

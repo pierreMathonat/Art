@@ -1,6 +1,8 @@
 package src.haxe.ogl.art.m2d.scene;
+
+import haxe.ogl.art.m2d.geom.ColorTransform;
 import haxe.ogl.art.core.Material;
-import haxe.ogl.art.m2d.geom.M44;
+import haxe.ogl.art.core.M44;
 import nme.events.Event;
 import nme.geom.Matrix3D;
 import nme.events.EventDispatcher;
@@ -66,7 +68,9 @@ class DisplayObject extends EventDispatcher
 	{
 		if (pchanged || schanged || rchanged)
 		{
-			return updateTransform();
+			_m.recompose(position, scale, rotation);
+			pchanged = schanged = rchanged = false;
+			return _m;
 		}else 
 		{
 			return _m;	
@@ -75,16 +79,9 @@ class DisplayObject extends EventDispatcher
 	
 	function set_matrix(m:M44):M44
 	{
-		return _m=m;
+		return _m = m;
 	}
 	
-	function updateTransform():M44
-	{
-		_m.recompose(position, scale, rotation);
-		pchanged = schanged = rchanged = false;
-		return _m;
-	}
-
 	
 	function get_localToWorld():M44
 	{
@@ -101,6 +98,20 @@ class DisplayObject extends EventDispatcher
 		_wtl.loadFrom(localToWorld);
 		_wtl.invert();
 		return _wtl;
+	}
+	
+	public var colorTransform:ColorTransform;
+	var _ltwCt:ColorTransform;
+	public var localToWorldColor(get_localToWorldColor, null):ColorTransform;
+	
+	function get_localToWorldColor():ColorTransform
+	{
+		_ltwCt.loadFrom(colorTransform);
+		if (parent != null)
+		{
+			_ltwCt.append(parent.localToWorldColor);
+		}
+		return _ltwCt;
 	}
 	
 	//-------Stage
@@ -196,6 +207,9 @@ class DisplayObject extends EventDispatcher
 		_ltw			= new M44();
 		_wtl			= new M44();
 		_m 				= new M44();
+		
+		colorTransform 	= new ColorTransform();
+		_ltwCt			= new ColorTransform();
 		
 		blendMode = BlendMode.NORMAL;
 		
